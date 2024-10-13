@@ -11,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/library.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'Honholulu1992'  # Change this to a random secret key for session management
 
