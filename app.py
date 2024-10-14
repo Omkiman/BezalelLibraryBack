@@ -22,6 +22,39 @@ CORS(app)
 with app.app_context():
     db.create_all()
 
+    # Check if the database is empty and insert data if it is
+    if User.query.count() == 0 and Book.query.count() == 0:
+        users = [
+            {"email": "omri@omri.com", "password": generate_password_hash("123"), "name": "Omri", "username": "Omri", "is_admin": True},
+            {"email": "user1@omri.com", "password": generate_password_hash("123"), "name": "User1", "username": "User1"},
+            {"email": "user2@omri.com", "password": generate_password_hash("123"), "name": "User2", "username": "User2"},
+            {"email": "user3@omri.com", "password": generate_password_hash("123"), "name": "User3", "username": "User3"}
+        ]
+        
+        # Add users to the database
+        for user_data in users:
+            user = User(**user_data)
+            db.session.add(user)
+
+        books = [
+            {"author": "Will Weight", "genre": "Fantasy", "photo_url": "https://m.media-amazon.com/images/I/81Tbf79ePML._SL1500_.jpg", "title": "Unsouled", "year": 2016},
+            {"author": "Will Weight", "genre": "Fantasy", "photo_url": "https://m.media-amazon.com/images/I/81hf4bG-9aL._SL1500_.jpg", "title": "Soulsmith", "year": 2017},
+            {"author": "Will Weight", "genre": "Fantasy", "photo_url": "https://m.media-amazon.com/images/I/81HpmoL4icL._SL1500_.jpg", "title": "Blackflame", "year": 2018},
+            {"author": "Will Weight", "genre": "Fantasy", "photo_url": "https://m.media-amazon.com/images/I/91cOLzytMbL._SL1500_.jpg", "title": "Skysworn", "year": 2019},
+            {"author": "Will Weight", "genre": "Fantasy", "photo_url": "https://m.media-amazon.com/images/I/81AiMyA++pL._SL1280_.jpg", "title": "Ghostwater", "year": 2020},
+            {"author": "Pierce Brown", "genre": "Sci-Fi", "photo_url": "https://m.media-amazon.com/images/I/81YOu17CxTL._SL1500_.jpg", "title": "Red Rising", "year": 2000},
+            {"author": "Pierce Brown", "genre": "Sci-Fi", "photo_url": "https://m.media-amazon.com/images/I/81d7AF0zjZL._SL1500_.jpg", "title": "Golden Son", "year": 2001},
+            {"author": "Pierce Brown", "genre": "Sci-Fi", "photo_url": "https://m.media-amazon.com/images/I/81xh7F-kvPL._SL1500_.jpg", "title": "Morning Star", "year": 2002}
+        ]
+        
+        # Add books to the database
+        for book_data in books:
+            book = Book(**book_data)
+            db.session.add(book)
+        
+        # Commit the changes
+        db.session.commit()
+
 # Set up logging
 logging.basicConfig(filename='library.log',
                     level=logging.INFO,  # Logs info, warning, error, critical
@@ -304,6 +337,18 @@ def return_book(current_user, borrow_id):
     db.session.commit()
     logger.info(f"Book returned: {borrow.book.title} by user ID {borrow.user_id}")
     return jsonify({'message': 'Book returned successfully'})
+
+
+
+    for user in users:
+        new_user = User(**user)
+        db.session.add(new_user)
+
+    for book in books:
+        new_book = Book(**book)
+        db.session.add(new_book)
+
+    db.session.commit()
 
 if __name__ == '__main__':
     app.run(debug=True)
